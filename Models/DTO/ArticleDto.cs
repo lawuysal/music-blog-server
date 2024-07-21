@@ -14,8 +14,5 @@ namespace music_blog_server.Models.Dto
 
         // Foreign key to category
         public required Guid CategoryId { get; set; }
-
-        // Navigation properties
-        public required Category Category { get; set; }
     }
 }

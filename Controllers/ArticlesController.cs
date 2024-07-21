@@ -40,7 +40,6 @@ namespace music_blog_server.Controllers
                     ImageDesc = article.ImageDesc,
                     Tags = article.Tags,
                     CategoryId = article.CategoryId,
-                    Category = article.Category
                 });
             }
 
@@ -69,7 +68,6 @@ namespace music_blog_server.Controllers
                 ImageDesc = article.ImageDesc,
                 Tags = article.Tags,
                 CategoryId = article.CategoryId,
-                Category = article.Category
             };
 
             return Ok(articleDto);
@@ -115,7 +113,6 @@ namespace music_blog_server.Controllers
                 ImageDesc = article.ImageDesc,
                 Tags = article.Tags,
                 CategoryId = article.CategoryId,
-                Category = article.Category
             };
 
             return CreatedAtAction(nameof(GetArticleById), new { id = article.Id }, articleDto);
