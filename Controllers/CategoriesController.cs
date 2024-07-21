@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using music_blog_server.Data;
 using music_blog_server.Models.Domain;
 using music_blog_server.Models.DTO;
@@ -20,9 +21,9 @@ namespace music_blog_server.Controllers
         // Get all categories
         // GET: api/categories
         [HttpGet]
-        public IActionResult GetAllCategories() 
+        public async Task<IActionResult> GetAllCategories() 
         {
-            var categories = dbContext.Categories.ToList();
+            var categories = await dbContext.Categories.ToListAsync();
 
             var categoriesDto = new List<CategoryDto>();
             foreach (var category in categories)
@@ -39,10 +40,10 @@ namespace music_blog_server.Controllers
 
         // Get category by id
         // GET: api/categories/id
-        [HttpGet("id:guid")]
-        public IActionResult GetCategoryById([FromRoute] Guid id) 
+        [HttpGet("{id:guid}")]
+        public async Task<IActionResult> GetCategoryById([FromRoute] Guid id) 
         {
-            var category = dbContext.Categories.Find(id);
+            var category = await dbContext.Categories.FindAsync(id);
 
             if (category == null)
             {
@@ -61,15 +62,15 @@ namespace music_blog_server.Controllers
         // Create category
         // POST: api/categories
         [HttpPost]
-        public IActionResult CreateCategory([FromBody] CategoryCreateRequestDto categoryCreateRequestDto)
+        public async Task<IActionResult> CreateCategory([FromBody] CategoryCreateRequestDto categoryCreateRequestDto)
         {
             var category = new Category()
             {
                 Name = categoryCreateRequestDto.Name,
             };
 
-            dbContext.Categories.Add(category);
-            dbContext.SaveChanges();
+            await dbContext.Categories.AddAsync(category);
+            await dbContext.SaveChangesAsync();
 
             var categoryDto = new CategoryDto() 
             { 
