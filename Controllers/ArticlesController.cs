@@ -1,9 +1,11 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using music_blog_server.Data;
 using music_blog_server.Models.Domain;
 using music_blog_server.Models.Dto;
 using music_blog_server.Models.DTO;
+using System.Globalization;
 
 namespace music_blog_server.Controllers
 {
@@ -21,9 +23,9 @@ namespace music_blog_server.Controllers
         // Get all articles
         // GET: api/articles
         [HttpGet]
-        public IActionResult GetAllArticles()
+        public async Task<IActionResult> GetAllArticles()
         {
-            var articles = dbContext.Articles.ToList();
+            var articles = await dbContext.Articles.ToListAsync();
 
             var articlesDto = new List<ArticleDto>();
             foreach(var article in articles)
@@ -46,10 +48,10 @@ namespace music_blog_server.Controllers
 
         // Get article by id
         // GET: api/articles/id
-        [HttpGet("id:guid")]
-        public IActionResult GetArticleById([FromRoute] Guid id)
+        [HttpGet("{id:guid}")]
+        public async Task<IActionResult> GetArticleById([FromRoute] Guid id)
         {
-            var article = dbContext.Articles.Find(id);
+            var article = await dbContext.Articles.FindAsync(id);
 
             if(article == null)
             {
@@ -74,21 +76,31 @@ namespace music_blog_server.Controllers
         // Create article
         // POST: api/articles
         [HttpPost]
-        public IActionResult CreateArticle([FromBody] ArticleCreateRequestDto articleCreateRequestDto)
+        public async Task<IActionResult> CreateArticle([FromBody] ArticleCreateRequestDto articleCreateRequestDto)
         {
+            var category = await dbContext.Categories.FindAsync(articleCreateRequestDto.CategoryId);
+
+            if (category == null)
+            {
+                return BadRequest("Invalid CategoryId: Category not found");
+            }
+
+            string format = "yyyy-MM-dd HH:mm:ss";
+            DateTime date = DateTime.ParseExact(articleCreateRequestDto.Date, format, CultureInfo.InvariantCulture);
+
             var article = new Article()
             {
                 Title = articleCreateRequestDto.Title,
-                Date = articleCreateRequestDto.Date,
+                Date = date,
                 Content = articleCreateRequestDto.Content,
                 ImageUrl = articleCreateRequestDto.ImageUrl,
                 ImageDesc = articleCreateRequestDto.ImageDesc,
                 Tags = articleCreateRequestDto.Tags,
-                Category = articleCreateRequestDto.Category
+                Category = category
             };
 
-            dbContext.Articles.Add(article);
-            dbContext.SaveChanges();
+            await dbContext.Articles.AddAsync(article);
+            await dbContext.SaveChangesAsync();
 
             var articleDto = new ArticleDto()
             {
