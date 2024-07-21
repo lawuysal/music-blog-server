@@ -10,6 +10,9 @@
         public required string ImageDesc { get; set; }  
         public required List<string> Tags { get; set; }
 
+        // Foreign key to category
+        public required Guid CategoryId { get; set; }
+
         // Navigation properties
         public required Category Category { get; set; }
     }

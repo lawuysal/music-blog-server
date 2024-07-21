@@ -39,6 +39,7 @@ namespace music_blog_server.Controllers
                     ImageUrl = article.ImageUrl,
                     ImageDesc = article.ImageDesc,
                     Tags = article.Tags,
+                    CategoryId = article.CategoryId,
                     Category = article.Category
                 });
             }
@@ -67,6 +68,7 @@ namespace music_blog_server.Controllers
                 ImageUrl = article.ImageUrl,
                 ImageDesc = article.ImageDesc,
                 Tags = article.Tags,
+                CategoryId = article.CategoryId,
                 Category = article.Category
             };
 
@@ -96,6 +98,7 @@ namespace music_blog_server.Controllers
                 ImageUrl = articleCreateRequestDto.ImageUrl,
                 ImageDesc = articleCreateRequestDto.ImageDesc,
                 Tags = articleCreateRequestDto.Tags,
+                CategoryId = category.Id,
                 Category = category
             };
 
@@ -111,6 +114,7 @@ namespace music_blog_server.Controllers
                 ImageUrl = article.ImageUrl,
                 ImageDesc = article.ImageDesc,
                 Tags = article.Tags,
+                CategoryId = article.CategoryId,
                 Category = article.Category
             };
 
