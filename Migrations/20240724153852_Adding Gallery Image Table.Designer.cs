@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using music_blog_server.Data;
 
@@ -11,9 +12,11 @@ using music_blog_server.Data;
 namespace music_blog_server.Migrations
 {
     [DbContext(typeof(MusicBlogDbContext))]
-    partial class MusicBlogDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240724153852_Adding Gallery Image Table")]
+    partial class AddingGalleryImageTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

@@ -26,6 +26,7 @@ namespace music_blog_server.Controllers
         public async Task<IActionResult> GetAllArticles()
         {
             var articles = await dbContext.Articles.ToListAsync();
+            articles = articles.OrderByDescending(x => x.Date).ToList();
 
             var articlesDto = new List<ArticleDto>();
             foreach(var article in articles)

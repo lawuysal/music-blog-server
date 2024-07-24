@@ -12,8 +12,8 @@ using music_blog_server.Data;
 namespace music_blog_server.Migrations
 {
     [DbContext(typeof(MusicBlogDbContext))]
-    [Migration("20240721102430_Initial Migration")]
-    partial class InitialMigration
+    [Migration("20240722134425_Azure Init Migration")]
+    partial class AzureInitMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

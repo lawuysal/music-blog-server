@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.FileProviders;
 using music_blog_server.Data;
+using music_blog_server.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,6 +19,8 @@ builder.Services.AddCors(p => p.AddPolicy("corspolicy", build =>
 
 builder.Services.AddDbContext<MusicBlogDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("MusicBlogConnectionString")));
 
+builder.Services.AddScoped<IGalleryImageRepsitory, LocalGalleryImageRepsitory>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -31,6 +35,12 @@ app.UseCors("corspolicy");
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
+
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "Images", "Gallery")),
+    RequestPath = "/images/gallery"
+});
 
 app.MapControllers();
 
