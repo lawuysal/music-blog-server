@@ -2,9 +2,9 @@
 
 namespace music_blog_server.Repositories
 {
-    public interface IGalleryImageRepsitory
+    public interface IArticleImageRepository
     {
-        public Task<GalleryImage> Upload(GalleryImage image)
+        public Task<ArticleImage> Upload(ArticleImage image)
         {
             throw new NotImplementedException();
         }

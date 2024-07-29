@@ -3,32 +3,31 @@ using music_blog_server.Models.Domain;
 
 namespace music_blog_server.Repositories
 {
-    public class LocalGalleryImageRepsitory : IGalleryImageRepository
+    public class LocalArticleImageRepository : IArticleImageRepository
     {
         private readonly IWebHostEnvironment webHostEnvironment;
         private readonly MusicBlogDbContext dbContext;
 
-        public LocalGalleryImageRepsitory(IWebHostEnvironment webHostEnvironment, MusicBlogDbContext dbContext)
+        public LocalArticleImageRepository(IWebHostEnvironment webHostEnvironment, MusicBlogDbContext dbContext)
         {
             this.webHostEnvironment = webHostEnvironment;
             this.dbContext = dbContext;
         }
-        public async Task<GalleryImage> Upload(GalleryImage image)
+        public async Task<ArticleImage> Upload(ArticleImage image)
         {
-            var localFilePath = Path.Combine(webHostEnvironment.ContentRootPath, "Images", "Gallery", $"{image.FileName}{image.FileExtension}");
+            var localFilePath = Path.Combine(webHostEnvironment.ContentRootPath, "Images", "Article", $"{image.FileName}{image.FileExtension}");
 
             using var stream = new FileStream(localFilePath, FileMode.Create);
             await image.File.CopyToAsync(stream);
 
-            var filePath = $"Images/Gallery/{image.FileName}{image.FileExtension}";
-            
+            var filePath = $"Images/Article/{image.FileName}{image.FileExtension}";
+
             image.FilePath = filePath;
 
             await dbContext.AddAsync(image);
             await dbContext.SaveChangesAsync();
 
             return image;
-
         }
     }
 }

@@ -13,5 +13,6 @@ namespace music_blog_server.Data
         public DbSet<Article> Articles { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<GalleryImage> GalleryImages { get; set; }
+        public DbSet<ArticleImage> ArticleImages { get; set; }
     }
 }

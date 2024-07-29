@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using music_blog_server.Data;
 using music_blog_server.Models.Domain;
@@ -9,28 +10,28 @@ namespace music_blog_server.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class GalleryImagesController : ControllerBase
+    public class ArticleImagesController : ControllerBase
     {
-        private readonly IGalleryImageRepository imageRepsitory;
+        private readonly IArticleImageRepository imageRepsitory;
         private readonly MusicBlogDbContext dbContext;
 
-        public GalleryImagesController(IGalleryImageRepository imageRepsitory, MusicBlogDbContext dbContext)
+        public ArticleImagesController(IArticleImageRepository imageRepsitory, MusicBlogDbContext dbContext)
         {
             this.imageRepsitory = imageRepsitory;
             this.dbContext = dbContext;
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllGalleryImages()
+        public async Task<IActionResult> GetAllArticleImages()
         {
-            var galleryImages = await dbContext.GalleryImages.ToListAsync();
-            galleryImages = galleryImages.OrderByDescending(x => x.FileCreatedAt).ToList();
+            var articleImages = await dbContext.ArticleImages.ToListAsync();
 
-            var galleryImagesDto = new List<GalleryImageDto>();
+            var articleImagesDto = new List<ArticleImageDto>();
 
-            foreach (var image in galleryImages) {
+            foreach (var image in articleImages)
+            {
 
-                galleryImagesDto.Add(new GalleryImageDto
+                articleImagesDto.Add(new ArticleImageDto
                 {
                     Id = image.Id,
                     FileName = image.FileName,
@@ -41,15 +42,27 @@ namespace music_blog_server.Controllers
                 });
             }
 
-            return Ok(galleryImagesDto);
+            return Ok(articleImagesDto);
+        }
 
+        [HttpGet("{id:guid}")]
+        public async Task<IActionResult> GetArticleImageById([FromRoute] Guid id)
+        {
+            var articleImage = await dbContext.ArticleImages.FindAsync(id);
+
+            if(articleImage == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(articleImage);
         }
 
         [HttpPost]
         [Route("Upload")]
-        public async Task<IActionResult> Upload([FromForm] GalleryImageUploadRequestDto request)
+        public async Task<IActionResult> Upload([FromForm] ArticleImageUploadRequestDto request)
         {
-            var imageDomainModel = new GalleryImage
+            var imageDomainModel = new ArticleImage
             {
                 File = request.File,
                 FileExtension = Path.GetExtension(request.File.FileName),
@@ -64,22 +77,22 @@ namespace music_blog_server.Controllers
         }
 
         [HttpDelete("{id:guid}")]
-        public async Task<IActionResult> DeleteGalleryImage([FromRoute] Guid id)
+        public async Task<IActionResult> DeleteArticleImage([FromRoute] Guid id)
         {
-            var galleryImage = await dbContext.GalleryImages.FindAsync(id);
+            var articleImage = await dbContext.ArticleImages.FindAsync(id);
 
-            if (galleryImage == null)
+            if (articleImage == null)
             {
                 return NotFound();
             }
 
-            var filePath = Path.Combine(Directory.GetCurrentDirectory(), galleryImage.FilePath);
+            var filePath = Path.Combine(Directory.GetCurrentDirectory(), articleImage.FilePath);
             if (System.IO.File.Exists(filePath))
             {
                 System.IO.File.Delete(filePath);
             }
 
-            dbContext.GalleryImages.Remove(galleryImage);
+            dbContext.ArticleImages.Remove(articleImage);
             await dbContext.SaveChangesAsync();
 
             return Ok();

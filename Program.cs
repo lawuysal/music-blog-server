@@ -19,7 +19,8 @@ builder.Services.AddCors(p => p.AddPolicy("corspolicy", build =>
 
 builder.Services.AddDbContext<MusicBlogDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("MusicBlogConnectionString")));
 
-builder.Services.AddScoped<IGalleryImageRepsitory, LocalGalleryImageRepsitory>();
+builder.Services.AddScoped<IGalleryImageRepository, LocalGalleryImageRepsitory>();
+builder.Services.AddScoped<IArticleImageRepository, LocalArticleImageRepository>();
 
 var app = builder.Build();
 
@@ -40,7 +41,14 @@ app.UseStaticFiles(new StaticFileOptions
 {
     FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "Images", "Gallery")),
     RequestPath = "/images/gallery"
-});
+}
+);
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "Images", "Article")),
+    RequestPath = "/images/article"
+}
+);
 
 app.MapControllers();
 

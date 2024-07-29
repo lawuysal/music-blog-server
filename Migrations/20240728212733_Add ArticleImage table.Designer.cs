@@ -12,8 +12,8 @@ using music_blog_server.Data;
 namespace music_blog_server.Migrations
 {
     [DbContext(typeof(MusicBlogDbContext))]
-    [Migration("20240722134425_Azure Init Migration")]
-    partial class AzureInitMigration
+    [Migration("20240728212733_Add ArticleImage table")]
+    partial class AddArticleImagetable
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -64,6 +64,35 @@ namespace music_blog_server.Migrations
                     b.ToTable("Articles");
                 });
 
+            modelBuilder.Entity("music_blog_server.Models.Domain.ArticleImage", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("FileCreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("FileExtension")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FileName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FilePath")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<long>("FileSizeInBytes")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ArticleImages");
+                });
+
             modelBuilder.Entity("music_blog_server.Models.Domain.Category", b =>
                 {
                     b.Property<Guid>("Id")
@@ -77,6 +106,35 @@ namespace music_blog_server.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Categories");
+                });
+
+            modelBuilder.Entity("music_blog_server.Models.Domain.GalleryImage", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("FileCreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("FileExtension")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FileName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FilePath")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<long>("FileSizeInBytes")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("GalleryImages");
                 });
 
             modelBuilder.Entity("music_blog_server.Models.Domain.Article", b =>

@@ -6,13 +6,13 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace music_blog_server.Migrations
 {
     /// <inheritdoc />
-    public partial class AddingGalleryImageTable : Migration
+    public partial class AddArticleImagetable : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "GalleryImages",
+                name: "ArticleImages",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -24,7 +24,7 @@ namespace music_blog_server.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_GalleryImages", x => x.Id);
+                    table.PrimaryKey("PK_ArticleImages", x => x.Id);
                 });
         }
 
@@ -32,7 +32,7 @@ namespace music_blog_server.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "GalleryImages");
+                name: "ArticleImages");
         }
     }
 }

@@ -28,6 +28,9 @@ namespace music_blog_server.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid>("ArticleImageId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<Guid>("CategoryId")
                         .HasColumnType("uniqueidentifier");
 
@@ -42,10 +45,6 @@ namespace music_blog_server.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("ImageUrl")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Tags")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -56,9 +55,40 @@ namespace music_blog_server.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("ArticleImageId");
+
                     b.HasIndex("CategoryId");
 
                     b.ToTable("Articles");
+                });
+
+            modelBuilder.Entity("music_blog_server.Models.Domain.ArticleImage", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("FileCreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("FileExtension")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FileName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FilePath")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<long>("FileSizeInBytes")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ArticleImages");
                 });
 
             modelBuilder.Entity("music_blog_server.Models.Domain.Category", b =>
@@ -107,11 +137,19 @@ namespace music_blog_server.Migrations
 
             modelBuilder.Entity("music_blog_server.Models.Domain.Article", b =>
                 {
+                    b.HasOne("music_blog_server.Models.Domain.ArticleImage", "ArticleImage")
+                        .WithMany()
+                        .HasForeignKey("ArticleImageId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("music_blog_server.Models.Domain.Category", "Category")
                         .WithMany()
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("ArticleImage");
 
                     b.Navigation("Category");
                 });
