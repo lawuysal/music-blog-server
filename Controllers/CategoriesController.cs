@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using music_blog_server.Data;
@@ -61,6 +62,7 @@ namespace music_blog_server.Controllers
 
         // Create category
         // POST: api/categories
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> CreateCategory([FromBody] CategoryCreateRequestDto categoryCreateRequestDto)
         {

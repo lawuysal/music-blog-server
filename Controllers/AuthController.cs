@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using music_blog_server.Models.DTO;
@@ -19,6 +20,7 @@ namespace music_blog_server.Controllers
             this.tokenRepository = tokenRepository;
         }
 
+        [Authorize]
         [HttpPost]
         [Route("Register")]
         public async Task<IActionResult> Register([FromBody] RegisterRequestDto registerRequestDto)
@@ -67,6 +69,14 @@ namespace music_blog_server.Controllers
             var response = new LoginResponseDto() { JWTToken = jwtToken };
 
             return Ok(response); 
+        }
+
+        [Authorize]
+        [HttpGet]
+        [Route("CheckToken")]
+        public IActionResult CheckToken()
+        {
+            return Ok("User is authorized.");
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using music_blog_server.Data;
 using music_blog_server.Models.Domain;
@@ -79,6 +80,7 @@ namespace music_blog_server.Controllers
 
         // Create article
         // POST: api/articles
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> CreateArticle([FromForm] ArticleCreateRequestDto articleCreateRequestDto)
         {
@@ -144,6 +146,7 @@ namespace music_blog_server.Controllers
             return Ok(articleDto);
         }
 
+        [Authorize]
         [HttpDelete("{id:guid}")]
         public async Task<IActionResult> DeleteById([FromRoute] Guid id)
         {

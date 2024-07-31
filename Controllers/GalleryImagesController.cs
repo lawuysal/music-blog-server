@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using music_blog_server.Data;
 using music_blog_server.Models.Domain;
@@ -20,6 +21,7 @@ namespace music_blog_server.Controllers
             this.dbContext = dbContext;
         }
 
+        [Authorize]
         [HttpGet]
         public async Task<IActionResult> GetAllGalleryImages()
         {
@@ -45,6 +47,7 @@ namespace music_blog_server.Controllers
 
         }
 
+        [Authorize]
         [HttpPost]
         [Route("Upload")]
         public async Task<IActionResult> Upload([FromForm] GalleryImageUploadRequestDto request)
@@ -63,6 +66,7 @@ namespace music_blog_server.Controllers
             return Ok(imageDomainModel);
         }
 
+        [Authorize]
         [HttpDelete("{id:guid}")]
         public async Task<IActionResult> DeleteGalleryImage([FromRoute] Guid id)
         {
